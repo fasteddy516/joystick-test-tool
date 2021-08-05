@@ -6,15 +6,17 @@ namespace joystick_test_tool
     public class HatSwitch
     {
         public string Name { get; set; }
+        public bool Enabled { get; set; }
         private Texture2D _atlas;
         private SpriteFont _titleFont, _dataFont;
         private string _position;
         private Vector2 _i_offset = new Vector2(0, 0);
         private Rectangle _background, _border, _outline, _fill, _markers, _center, _indicator;
 
-        public HatSwitch(string name, Texture2D atlas, SpriteFont titleFont, SpriteFont dataFont)
+        public HatSwitch(string name, Texture2D atlas, SpriteFont titleFont, SpriteFont dataFont, bool enabled=true)
         {
             Name = name;
+            Enabled = enabled;
             _atlas = atlas;
             _titleFont = titleFont;
             _dataFont = dataFont;
@@ -97,9 +99,19 @@ namespace joystick_test_tool
                 _background.Width,
                 _background.Height
             );
-            spriteBatch.Draw(_atlas, panel, _background, Color.White * 0.5f);
-            spriteBatch.Draw(_atlas, panel, _border, Color.White);
+            if (Enabled)
+            {
+                spriteBatch.Draw(_atlas, panel, _background, Color.White * 0.5f);
+                spriteBatch.Draw(_atlas, panel, _border, Color.White);
+            }
+            else
+            {
+                spriteBatch.Draw(_atlas, panel, _background, Color.White * 0.1f);
+                return;
+            }
 
+            // the rest only gets drawn if Enabled=true
+            
             // title text
             Rectangle titleBounds = new Rectangle(
                 (int)location.X,

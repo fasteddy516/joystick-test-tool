@@ -47,9 +47,6 @@ namespace joystick_test_tool
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            //hatBody = Content.Load<Texture2D>("hat_switch/body");
-            //hatIndicator = Content.Load<Texture2D>("hat_switch/indicator");
-        
             axisAtlas = Content.Load<Texture2D>("textures/axis");
             buttonAtlas = Content.Load<Texture2D>("textures/button");
             hatAtlas = Content.Load<Texture2D>("textures/hat");
@@ -63,7 +60,7 @@ namespace joystick_test_tool
             hats.Add(new HatSwitch("HAT-1", hatAtlas, titleFont, dataFont));
             hats.Add(new HatSwitch("HAT-2", hatAtlas, titleFont, dataFont));
             hats.Add(new HatSwitch("HAT-3", hatAtlas, titleFont, dataFont));
-            hats.Add(new HatSwitch("HAT-4", hatAtlas, titleFont, dataFont));
+            hats.Add(new HatSwitch("HAT-4", hatAtlas, titleFont, dataFont, enabled: false));
         }
 
         protected override void Update(GameTime gameTime)
@@ -87,10 +84,9 @@ namespace joystick_test_tool
 
             // --- Rendering on the full size target starts here ---
 
-            //GraphicsDevice.Clear(Color.DarkGray);
-
             _spriteBatch.Begin();
             
+            // this is temporary - just to help align individual components
             _spriteBatch.Draw(tempBackground, new Vector2(0, 0), Color.White);
 
             // HEADER ---------------------------------------------------------
@@ -102,6 +98,7 @@ namespace joystick_test_tool
             hats[2].Draw(_spriteBatch, new Vector2(x, y + oy));
             hats[3].Draw(_spriteBatch, new Vector2(x + ox, y + oy));
 
+            _spriteBatch.DrawString(dataFont, Joystick.GetState(0).Axes[0].ToString(), new Vector2(100, 100), Color.Yellow);
 
             _spriteBatch.End();
             // --- Rendering on the full size target stops here ---
