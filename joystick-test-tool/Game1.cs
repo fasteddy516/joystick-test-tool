@@ -11,9 +11,10 @@ namespace joystick_test_tool
         private SpriteBatch _spriteBatch;
         private RenderTarget2D _fullsizeRenderTarget;
         private Texture2D axisAtlas, buttonAtlas, hatAtlas, headerTexture;
-        private SpriteFont titleFont, dataFont;
-        private Texture2D tempBackground;
+        private SpriteFont titleFont, dataFont, buttonFont;
         private List<HatSwitch> hats = new List<HatSwitch>();
+        private List<Axis> axes = new List<Axis>();
+        private Buttons buttons;
 
         public Game1()
         {
@@ -54,17 +55,34 @@ namespace joystick_test_tool
 
             titleFont = Content.Load<SpriteFont>("fonts/title");
             dataFont = Content.Load<SpriteFont>("fonts/data");
+            buttonFont = Content.Load<SpriteFont>("fonts/button");
 
-            tempBackground = Content.Load<Texture2D>("textures/sections");
+            axes.Add(new Axis("X", axisAtlas, titleFont, dataFont));
+            axes.Add(new Axis("Y", axisAtlas, titleFont, dataFont));
+            axes.Add(new Axis("Z", axisAtlas, titleFont, dataFont));
+            axes.Add(new Axis("RX", axisAtlas, titleFont, dataFont));
+            axes.Add(new Axis("RY", axisAtlas, titleFont, dataFont));
+            axes.Add(new Axis("RZ", axisAtlas, titleFont, dataFont));
+            axes.Add(new Axis("S0", axisAtlas, titleFont, dataFont));
+            axes.Add(new Axis("S1", axisAtlas, titleFont, dataFont));
+
+            buttons = new Buttons(Joystick.GetCapabilities(0).ButtonCount, buttonAtlas, titleFont, buttonFont);
 
             hats.Add(new HatSwitch("HAT-1", hatAtlas, titleFont, dataFont));
             hats.Add(new HatSwitch("HAT-2", hatAtlas, titleFont, dataFont));
             hats.Add(new HatSwitch("HAT-3", hatAtlas, titleFont, dataFont));
-            hats.Add(new HatSwitch("HAT-4", hatAtlas, titleFont, dataFont, enabled: false));
+            hats.Add(new HatSwitch("HAT-4", hatAtlas, titleFont, dataFont));
         }
 
         protected override void Update(GameTime gameTime)
         {
+            for (int a = 0; a < axes.Count; a++)
+            {
+                axes[a].Update(Joystick.GetState(0).Axes[a]);
+            }
+
+            buttons.Update(Joystick.GetState(0).Buttons);
+
             for (int h = 0; h < hats.Count; h++)
             {
                 hats[h].Update(Joystick.GetState(0).Hats[h].ToString());
@@ -86,11 +104,20 @@ namespace joystick_test_tool
 
             _spriteBatch.Begin();
             
-            // this is temporary - just to help align individual components
-            _spriteBatch.Draw(tempBackground, new Vector2(0, 0), Color.White);
-
             // HEADER ---------------------------------------------------------
             _spriteBatch.Draw(headerTexture, new Vector2(0, 0), Color.White);
+
+            x = 18; y = 72; ox = 126; oy = 414;
+            axes[0].Draw(_spriteBatch, new Vector2(x, y));
+            axes[1].Draw(_spriteBatch, new Vector2(x + ox, y));
+            axes[2].Draw(_spriteBatch, new Vector2(x + 2 * ox, y));
+            axes[3].Draw(_spriteBatch, new Vector2(x + 3 * ox, y));
+            axes[4].Draw(_spriteBatch, new Vector2(x, y + oy));
+            axes[5].Draw(_spriteBatch, new Vector2(x + ox, y + oy));
+            axes[6].Draw(_spriteBatch, new Vector2(x + 2 * ox, y + oy));
+            axes[7].Draw(_spriteBatch, new Vector2(x + 3 * ox, y + oy));           
+
+            buttons.Draw(_spriteBatch, new Vector2(522, 72));
 
             x = 1098; y = 72; ox = 252; oy = 414;
             hats[0].Draw(_spriteBatch, new Vector2(x,y));
@@ -98,9 +125,8 @@ namespace joystick_test_tool
             hats[2].Draw(_spriteBatch, new Vector2(x, y + oy));
             hats[3].Draw(_spriteBatch, new Vector2(x + ox, y + oy));
 
-            _spriteBatch.DrawString(dataFont, Joystick.GetState(0).Axes[0].ToString(), new Vector2(100, 100), Color.Yellow);
-
             _spriteBatch.End();
+
             // --- Rendering on the full size target stops here ---
 
             // Scale and output rendered full-size target to actual size
