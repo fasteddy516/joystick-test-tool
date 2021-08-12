@@ -54,12 +54,12 @@ namespace joystick_test_tool
             );
             if (Enabled)
             {
-                spriteBatch.Draw(_atlas, panel, _background, Color.White * 0.5f);
-                spriteBatch.Draw(_atlas, panel, _border, Color.White);
+                spriteBatch.Draw(_atlas, panel, _background, Theme.Axis["background"]);
+                spriteBatch.Draw(_atlas, panel, _border, Theme.Axis["border"]);
             }
             else
             {
-                spriteBatch.Draw(_atlas, panel, _background, Color.White * 0.1f);
+                spriteBatch.Draw(_atlas, panel, _background, Theme.Axis["disabled"]);
                 return;
             }
 
@@ -76,16 +76,21 @@ namespace joystick_test_tool
                 _titleFont,
                 Name,
                 TextTools.CenterVector(_titleFont.MeasureString(Name), titleBounds),
-                Color.Black
+                Theme.Axis["title"]
             );
 
             // body
-            spriteBatch.Draw(_atlas, panel, _track, Color.White);
-            spriteBatch.Draw(_atlas, panel, _markers, Color.White);
+            spriteBatch.Draw(_atlas, panel, _track, Theme.Axis["track"]);
+            spriteBatch.Draw(_atlas, panel, _markers, Theme.Axis["markers"]);
 
             // center marker
+            Color _indicator_color = Theme.Axis["indicator_active"];
+            
             if (_position == 0)
-                spriteBatch.Draw(_atlas, panel, _center, Color.White);
+            {
+                spriteBatch.Draw(_atlas, panel, _center, Theme.Axis["center"]);
+                _indicator_color = Theme.Axis["indicator_inactive"];
+            }
 
             // indicator
             Rectangle indicator = new Rectangle(
@@ -94,7 +99,7 @@ namespace joystick_test_tool
                 _indicator.Width,
                 _indicator.Height
             );
-            spriteBatch.Draw(_atlas, indicator, _indicator, Color.White);
+            spriteBatch.Draw(_atlas, indicator, _indicator, _indicator_color);
 
             // data text
             int dataOffsetY = (int)location.Y + bodyOffsetY + bodyHeight;
@@ -108,7 +113,7 @@ namespace joystick_test_tool
                 _dataFont,
                 _position.ToString(),
                 TextTools.CenterVector(_dataFont.MeasureString(_position.ToString()), dataBounds),
-                Color.Black
+                Theme.Axis["data"]
             );
 
             // spriteBatch.End() will be called in the main draw routine

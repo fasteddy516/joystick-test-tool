@@ -51,12 +51,12 @@ namespace joystick_test_tool
             );
             if (_states.Length > 0)
             {
-                spriteBatch.Draw(_atlas, panel, _background, Color.White * 0.5f);
-                spriteBatch.Draw(_atlas, panel, _border, Color.White);
+                spriteBatch.Draw(_atlas, panel, _background, Theme.Button["background"]);
+                spriteBatch.Draw(_atlas, panel, _border, Theme.Button["border"]);
             }
             else
             {
-                spriteBatch.Draw(_atlas, panel, _background, Color.White * 0.1f);
+                spriteBatch.Draw(_atlas, panel, _background, Theme.Button["disabled"]);
                 return;
             }
 
@@ -73,7 +73,7 @@ namespace joystick_test_tool
                 _titleFont,
                 "BUTTONS",
                 TextTools.CenterVector(_titleFont.MeasureString("BUTTONS"), titleBounds),
-                Color.Black
+                Theme.Button["title"]
             );
 
             const int x_step = 65;
@@ -92,13 +92,13 @@ namespace joystick_test_tool
                     
                     if (_states[b])
                     {                        
-                        spriteBatch.Draw(_atlas, button_dest, _active, Color.White);
-                        textColor = Color.Black;
+                        spriteBatch.Draw(_atlas, button_dest, _active, Theme.Button["button_active"]);
+                        textColor = Theme.Button["number_active"];
                     }
                     else
                     {
-                        spriteBatch.Draw(_atlas, button_dest, _inactive, Color.White);
-                        textColor = Color.White;
+                        spriteBatch.Draw(_atlas, button_dest, _inactive, Theme.Button["button_inactive"]);
+                        textColor = Theme.Button["number_inactive"];
                     }
                     spriteBatch.DrawString(
                         _dataFont,
@@ -108,7 +108,7 @@ namespace joystick_test_tool
                     );                    
                 }
                 else
-                    spriteBatch.Draw(_atlas, button_dest, _disabled, Color.White * 0.5f);
+                    spriteBatch.Draw(_atlas, button_dest, _disabled, Theme.Button["button_disabled"]);
 
                 if ((b + 1) % 8 == 0)
                 {

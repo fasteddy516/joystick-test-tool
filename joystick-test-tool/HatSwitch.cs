@@ -101,12 +101,12 @@ namespace joystick_test_tool
             );
             if (Enabled)
             {
-                spriteBatch.Draw(_atlas, panel, _background, Color.White * 0.5f);
-                spriteBatch.Draw(_atlas, panel, _border, Color.White);
+                spriteBatch.Draw(_atlas, panel, _background, Theme.Hat["background"]);
+                spriteBatch.Draw(_atlas, panel, _border, Theme.Hat["border"]);
             }
             else
             {
-                spriteBatch.Draw(_atlas, panel, _background, Color.White * 0.1f);
+                spriteBatch.Draw(_atlas, panel, _background, Theme.Hat["disabled"]);
                 return;
             }
 
@@ -123,7 +123,7 @@ namespace joystick_test_tool
                 _titleFont,
                 Name,
                 TextTools.CenterVector(_titleFont.MeasureString(Name), titleBounds),
-                Color.Black
+                Theme.Hat["title"]
             );
 
             // body
@@ -133,10 +133,10 @@ namespace joystick_test_tool
                 _outline.Width,
                 _outline.Height
             );
-            spriteBatch.Draw(_atlas, body, _fill, Color.White * 0.5f);
-            spriteBatch.Draw(_atlas, body, _outline, Color.White);
-            spriteBatch.Draw(_atlas, body, _markers, Color.White);
-            spriteBatch.Draw(_atlas, body, _center, Color.White);
+            spriteBatch.Draw(_atlas, body, _fill, Theme.Hat["fill"]);
+            spriteBatch.Draw(_atlas, body, _outline, Theme.Hat["outline"]);
+            spriteBatch.Draw(_atlas, body, _markers, Theme.Hat["markers"]);
+            spriteBatch.Draw(_atlas, body, _center, Theme.Hat["center"]);
 
             // indicator
             Rectangle indicator = new Rectangle(
@@ -145,7 +145,10 @@ namespace joystick_test_tool
                 _indicator.Width,
                 _indicator.Height
             );
-            spriteBatch.Draw(_atlas, indicator, _indicator, Color.White);
+            Color _indicator_color = Theme.Hat["indicator_inactive"];
+            if (_position != "IDLE")
+                _indicator_color = Theme.Hat["indicator_active"];
+            spriteBatch.Draw(_atlas, indicator, _indicator, _indicator_color);
 
             // data text
             int dataOffsetY = (int)location.Y + bodyOffsetY + bodyHeight;
@@ -159,7 +162,7 @@ namespace joystick_test_tool
                 _dataFont,
                 _position,
                 TextTools.CenterVector(_dataFont.MeasureString(_position), dataBounds),
-                Color.Black
+                Theme.Hat["data"]
             );
 
             // spriteBatch.End() will be called in the main draw routine

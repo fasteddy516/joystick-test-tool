@@ -21,6 +21,7 @@ namespace joystick_test_tool
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
+            //Window.IsBorderless = true;
         }
 
         protected override void Initialize()
@@ -95,17 +96,16 @@ namespace joystick_test_tool
         {
             int x, y, ox, oy;  // local scratch variables for drawing
 
-            GraphicsDevice.Clear(Color.Black);
-
             // First render target is our "native" full size of 1600x900
             GraphicsDevice.SetRenderTarget(_fullsizeRenderTarget);
+            GraphicsDevice.Clear(Theme.Main["background"]);
 
             // --- Rendering on the full size target starts here ---
 
             _spriteBatch.Begin();
             
             // HEADER ---------------------------------------------------------
-            _spriteBatch.Draw(headerTexture, new Vector2(0, 0), Color.White);
+            _spriteBatch.Draw(headerTexture, new Vector2(0, 0), Theme.Main["header"]);
 
             x = 18; y = 72; ox = 126; oy = 414;
             axes[0].Draw(_spriteBatch, new Vector2(x, y));
