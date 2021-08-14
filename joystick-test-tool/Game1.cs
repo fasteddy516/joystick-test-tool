@@ -79,14 +79,26 @@ namespace joystick_test_tool
         {
             for (int a = 0; a < axes.Count; a++)
             {
-                axes[a].Update(Joystick.GetState(0).Axes[a]);
+                if (a >= Joystick.GetCapabilities(0).AxisCount)
+                    axes[a].Enabled = false;
+                else
+                {
+                    axes[a].Enabled = true;
+                    axes[a].Update(Joystick.GetState(0).Axes[a]);
+                }
             }
 
             buttons.Update(Joystick.GetState(0).Buttons);
 
             for (int h = 0; h < hats.Count; h++)
             {
-                hats[h].Update(Joystick.GetState(0).Hats[h].ToString());
+                if (h >= Joystick.GetCapabilities(0).HatCount)
+                    hats[h].Enabled = false;
+                else
+                {
+                    hats[h].Enabled = true;
+                    hats[h].Update(Joystick.GetState(0).Hats[h].ToString());
+                }
             }
 
             base.Update(gameTime);
